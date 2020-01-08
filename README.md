@@ -27,7 +27,8 @@ ps： 暂时不支持根据请求参数的逻辑切换返回格式，仅可以�
 
 ### 如何安装
 
-如果只是使用，我们只需要JRE即可，无需任何其他软件。 
+如果只是使用，我们只需要JRE即可，无需任何其他软件。   
+不用clone源码！！！直接到[Releases](https://github.com/i-am-vt/v-mock/releases)页面（访问慢可以用[码云的](https://gitee.com/vtDev/v-mock/releases)），下载最新版本的jar包  
 
 默认80端口 可以追加 --server.port=xxx 自己指定 
 
