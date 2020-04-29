@@ -43,7 +43,7 @@ java -jar v-mock.jar
 
 例如, 我想指定DB文件目录并且以8098端口启动：  
 ```
-java -Djava.io.tmpdir=/Users/vt/Documents -jar v-mock.jar --server.port=8089
+java -Djava.io.tmpdir=/Users/vt/Documents/vmocktmp -jar v-mock.jar --server.port=8089
 ``` 
 
 推荐保存为sh或bat脚本，方便下次使用。
