@@ -1,5 +1,7 @@
 package com.vmock.base.constant;
 
+import com.vmock.base.utils.BizUtils;
+
 /**
  * 通用常量信息
  *
@@ -62,5 +64,6 @@ public final class CommonConst {
      * 首页
      */
     public static final String INDEX_URL = "/index";
+
 
 }
