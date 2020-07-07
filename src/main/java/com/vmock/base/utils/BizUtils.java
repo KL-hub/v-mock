@@ -10,7 +10,7 @@ import com.vmock.base.core.response.IMockResponse;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import org.springframework.http.HttpMethod;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +63,7 @@ public class BizUtils {
         Map<String, String> paramMap = ServletUtil.getParamMap(request);
         requestJsonObj.put("params", paramMap);
         // body
+        request = new ContentCachingRequestWrapper(request);
         @Cleanup BufferedReader reader = request.getReader();
         String body = reader.lines().collect(Collectors.joining(System.lineSeparator()));
         requestJsonObj.put("body", body);
