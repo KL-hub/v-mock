@@ -3,7 +3,9 @@ package com.vmock.biz.controller;
 import com.vmock.base.utils.ExcelUtil;
 import com.vmock.base.vo.Result;
 import com.vmock.base.vo.TableDataVo;
+import com.vmock.biz.entity.Project;
 import com.vmock.biz.entity.Url;
+import com.vmock.biz.service.IProjectService;
 import com.vmock.biz.service.IUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ public class UrlController extends BaseController {
 
     @Autowired
     private IUrlService mockUrlService;
+
+    @Autowired
+    private IProjectService mockProjectService;
 
 
     @GetMapping
@@ -66,6 +71,22 @@ public class UrlController extends BaseController {
         return PREFIX + "/add";
     }
 
+    /**
+     * 新增url路径
+     */
+    @GetMapping("/addProject")
+    public String addProject() {
+        return PREFIX + "/addProject";
+    }
+
+    /**
+     * 新增url路径
+     */
+    @PostMapping("/addProject")
+    @ResponseBody
+    public Result addSaveProject(Project project) {
+        return create(mockProjectService.insertMockProject(project));
+    }
     /**
      * 新增保存url路径
      */
@@ -136,5 +157,13 @@ public class UrlController extends BaseController {
         return Result.success();
     }
 
+    /**
+     * 查询项目
+     */
 
+    @GetMapping("/listProject")
+    @ResponseBody
+    public Result list() {
+        return Result.success(mockProjectService.listAllProject());
+    }
 }

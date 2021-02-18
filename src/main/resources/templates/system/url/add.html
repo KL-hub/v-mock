@@ -17,6 +17,28 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">是否回调：</label>
+            <div class="col-sm-8">
+                <input type="radio" name="callbackFlag" value="1">是</input>
+                <input type="radio" name="callbackFlag" checked value="0">否</input>
+            </div>
+        </div>
+<!--        <div class="form-group">-->
+<!--            <label class="col-sm-3 control-label">是否加密：</label>-->
+<!--            <div class="col-sm-8">-->
+<!--                <input type="radio" name="encryFlag" value="1">是</input>-->
+<!--                <input type="radio" name="encryFlag" checked value="0">否</input>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">项目：</label>
+            <div class="col-sm-8">
+                <select id="projectSelect" name="projectId" class="form-control">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">名称：</label>
             <div class="col-sm-8">
                 <input name="name" class="form-control" type="text" required maxlength="150">
@@ -64,7 +86,16 @@
                 $.operate.save(prefix + "/add", $('#form-url-add').serialize());
             }
         }
+        $(function () {
+            $.get("/system/url/listProject",function (data) {
+                if(data.code==0){
+                    for(var i in data.data){
+                        $("#projectSelect").append('<option value='+data.data[i].projectId+'>'+data.data[i].projectName+'</option>');
+                    }
 
+                }
+            })
+        })
 </script>
 </body>
 

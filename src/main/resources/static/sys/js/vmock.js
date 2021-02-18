@@ -887,9 +887,17 @@ var table = {
                 table.set();
                 $.modal.open("添加" + table.options.modalName, $.operate.addUrl(id))
             },
+            addProject: function(id) {
+                table.set();
+                $.modal.open("添加" + table.options.modalName, $.operate.addProjectUrl(id))
+            },
             addTab: function(id) {
                 table.set();
                 $.modal.openTab("添加" + table.options.modalName, $.operate.addUrl(id))
+            },
+            addProjectTab: function(id) {
+                table.set();
+                $.modal.openTab("添加" + table.options.modalName, $.operate.addProject1(id));
             },
             addFull: function(id) {
                 table.set();
@@ -898,6 +906,10 @@ var table = {
             },
             addUrl: function(id) {
                 var url = $.common.isEmpty(id) ? table.options.createUrl.replace("{id}", "") : table.options.createUrl.replace("{id}", id);
+                return url
+            },
+            addProjectUrl: function(id) {
+                var url = $.common.isEmpty(id) ? table.options.createProjectUrl.replace("{id}", "") : table.options.createProjectUrl.replace("{id}", id);
                 return url
             },
             edit: function(id) {

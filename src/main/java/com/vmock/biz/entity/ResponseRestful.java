@@ -59,4 +59,10 @@ public class ResponseRestful extends BaseEntity<ResponseRestful> implements IMoc
     @Excel(name = "请求方法", readConverterExp = "0=GET,1=HEAD,2=POST,3=PUT,4=PATCH,5=DELETE,6=OPTIONS,7=TRACE")
     private Integer httpMethod;
 
+    /**
+     * 自定义响应头
+     */
+    @Excel(name = "加解密key")
+    private String secretKey;
+
 }

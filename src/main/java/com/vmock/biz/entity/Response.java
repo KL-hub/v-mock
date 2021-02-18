@@ -64,4 +64,9 @@ public class Response extends BaseEntity<Response> implements IMockResponse {
     @Excel(name = "请求方法")
     private String method;
 
+    /**
+     * 自定义响应头
+     */
+    @Excel(name = "加解密key")
+    private String secretKey;
 }

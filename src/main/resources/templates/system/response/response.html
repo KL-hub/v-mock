@@ -11,7 +11,8 @@
                 <div class="select-list">
                     <ul>
                         <!-- url id-->
-                        <input type="hidden" name="urlId" th:value="${urlId}"/>
+                        <input type="hidden" id="urlId" name="urlId" th:value="${urlId}"/>
+                        <input type="hidden" id="callbackFlag" th:value="${callbackFlag}"/>
                         <li>
                             <p style="width: 90px;">使用中/全部：</p>
                             <input type="checkbox" name="main" value="1" title="勾选只看使用中，否则显示全部"/>
@@ -59,6 +60,7 @@
 
         var prefix = ctx + "system/response";
 
+        var callbackFlag= $('#callbackFlag').val();
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -108,6 +110,9 @@
                         actions.push(`<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="$.operate.detail('${row.responseId}')"><i class="fa fa-tasks"></i>详情</a> `);
                         actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.responseId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.responseId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if(callbackFlag ==1) {
+                            actions.push(`<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="sendMessage('${row.responseId}')"><i class="fa fa-tasks"></i>发送</a> `);
+                        }
                         return actions.join('');
                     }
                 }]
@@ -127,6 +132,17 @@
              });
         }
 
+        function sendMessage(id){
+            //alert($("#urlId").val())
+            //调用接口发送请求
+            $.post("/system/response/send",{"responseId":id,"urlId":$("#urlId").val()},function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    $.modal.msgReload("发送成功", modal_status.SUCCESS)
+                } else {
+                    $.modal.alertError(result.msg)
+                }
+            })
+        }
 </script>
 </body>
 </html>

@@ -1,17 +1,28 @@
 package com.vmock.biz.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vmock.base.constant.CommonConst;
+import com.vmock.biz.entity.Log;
 import com.vmock.biz.entity.Response;
+import com.vmock.biz.entity.Url;
 import com.vmock.biz.enums.MainEnum;
 import com.vmock.biz.mapper.ResponseMapper;
+import com.vmock.biz.mapper.UrlMapper;
+import com.vmock.biz.service.ILogService;
 import com.vmock.biz.service.IResponseService;
+import com.vmock.biz.util.AESUtil;
+import com.vmock.biz.util.HttpClinetUtil;
+import netscape.javascript.JSObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +36,11 @@ public class ResponseServiceImpl extends ServiceImpl<ResponseMapper, Response> i
 
     @Autowired
     private ResponseMapper mockResponseMapper;
+    @Autowired
+    private UrlMapper urlMapper;
+
+    @Autowired
+    private ILogService iLogService;
 
     /**
      * 查询返回体列表
@@ -84,5 +100,39 @@ public class ResponseServiceImpl extends ServiceImpl<ResponseMapper, Response> i
                 .eq(Response::getMain, MainEnum.ENABLED.getCode())
                 // limit
                 .last(CommonConst.LIMIT_ONE));
+    }
+
+    @Override
+    public boolean sendCallBackMessage(Long responseId, Long urlId) throws Exception {
+        Response response = mockResponseMapper.selectById(responseId);
+        Url url = urlMapper.selectById(urlId);
+        String s="";
+        if(StringUtils.isNotBlank(response.getSecretKey())){
+            s = HttpClinetUtil.doPost(url.getUrl(), AESUtil.encrypt(response.getContent(),response.getSecretKey()), response.getCustomHeader());
+        }else {
+            s = HttpClinetUtil.doPost(url.getUrl(), response.getContent(), response.getCustomHeader());
+        }
+        Log log=new Log();
+        log.setHitUrl(url.getUrl());
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsObject2 = new JSONObject();
+        if(StringUtils.isNotBlank(response.getCustomHeader())){
+            JSONArray jsonArray1 = new JSONArray(response.getCustomHeader());
+            for (Object o : jsonArray1) {
+                JSONObject jsonObject1 = new JSONObject(o);
+                jsObject2.put(String.valueOf(jsonObject1.get("key")),jsonObject1.get("val"));
+            }
+        }
+        jsonObject.put("headers",jsObject2);
+        jsonObject.put("params",null);
+        jsonObject.put("body",response.getContent());
+        log.setRequestDetail(jsonObject.toString());
+
+        JSONObject jsonObject1=new JSONObject();
+        jsonObject1.put("respStatus",200);
+        jsonObject1.put("respContent",s);
+        log.setResponseDetail(jsonObject1.toString());
+        iLogService.asyncInsert(log);
+        return true;
     }
 }

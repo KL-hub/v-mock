@@ -5,6 +5,7 @@ import com.vmock.base.vo.Result;
 import com.vmock.base.vo.TableDataVo;
 import com.vmock.biz.entity.Response;
 import com.vmock.biz.enums.ResponseTypeEnum;
+import com.vmock.biz.service.ILogService;
 import com.vmock.biz.service.IResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,8 +31,9 @@ public class ResponseController extends BaseController {
 
 
     @GetMapping
-    public String response(String urlId, Integer type, ModelMap mmap) {
+    public String response(String urlId, Integer type,String  callbackFlag,ModelMap mmap) {
         mmap.put("urlId", urlId);
+        mmap.put("callbackFlag", callbackFlag);
         if (ResponseTypeEnum.RESTFUL.getCode().equals(type)) {
             return PREFIX + "/response-restful";
         }
@@ -128,5 +130,14 @@ public class ResponseController extends BaseController {
     @ResponseBody
     public Result remove(String ids) {
         return create(mockResponseService.removeById(ids));
+    }
+
+    /**
+     *  回调发送报文
+     */
+    @PostMapping("/send")
+    @ResponseBody
+    public Result sendCallBack(Long responseId,Long urlId) throws Exception {
+        return create(mockResponseService.sendCallBackMessage(responseId,urlId));
     }
 }

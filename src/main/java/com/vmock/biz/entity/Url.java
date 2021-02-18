@@ -53,4 +53,22 @@ public class Url extends BaseEntity<Url> {
     @Excel(name = "响应类型")
     private Integer responseType;
 
+    /**
+     * 所属项目
+     */
+    @Excel(name = "所属项目的ID")
+    private Long projectId;
+
+    /**
+     *  是否是回调地址
+     */
+    @Excel(name = "是否是回调")
+    private String callbackFlag;
+
+    /**
+     *  是否是回调地址
+     */
+    @Excel(name = "是否开启加解密")
+    private String encryFlag;
+
 }

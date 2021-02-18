@@ -80,6 +80,7 @@ public class UrlServiceImpl extends ServiceImpl<UrlMapper, Url> implements IUrlS
         return this.list(Wrappers.<Url>lambdaQuery()
                 .like(StrUtil.isNotBlank(mockUrl.getName()), Url::getName, mockUrl.getName())
                 .like(StrUtil.isNotBlank(mockUrl.getDescription()), Url::getDescription, mockUrl.getDescription())
+                .eq(mockUrl.getProjectId()!=null,Url::getProjectId,mockUrl.getProjectId())
                 .orderByDesc(Url::getCreateTime));
     }
 

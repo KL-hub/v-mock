@@ -1,17 +1,20 @@
 package com.vmock.biz.controller;
 
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.vmock.base.utils.ExcelUtil;
 import com.vmock.base.vo.Result;
 import com.vmock.base.vo.TableDataVo;
 import com.vmock.biz.entity.Log;
 import com.vmock.biz.service.ILogService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 操作日志记录
@@ -67,7 +70,10 @@ public class LogController extends BaseController {
         Log mockLog = mockLogService.getById(logId);
         String requestDetail = mockLog.getRequestDetail();
         mmap.put("mockLog", mockLog);
-        mmap.put("requestDetail", JSONUtil.parseObj(requestDetail));
+
+        if(StringUtils.isNotBlank(requestDetail)) {
+            mmap.put("requestDetail", JSONUtil.parseObj(requestDetail));
+        }
         return PREFIX + "/requestdetail";
     }
 
@@ -76,7 +82,9 @@ public class LogController extends BaseController {
         Log mockLog = mockLogService.getById(logId);
         String responseDetail = mockLog.getResponseDetail();
         mmap.put("mockLog", mockLog);
-        mmap.put("responseDetail", JSONUtil.parseObj(responseDetail));
+        if(StringUtils.isNotBlank(responseDetail)) {
+            mmap.put("responseDetail", JSONUtil.parseObj(responseDetail));
+        }
         return PREFIX + "/responsedetail";
     }
 }

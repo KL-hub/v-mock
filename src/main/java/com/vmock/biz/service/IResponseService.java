@@ -36,4 +36,12 @@ public interface IResponseService extends IService<Response> {
      * @return MockResponse
      */
     Response selectMainResponse(Long urlId);
+    
+    /**
+     * @Description: 回调发送请求
+     * @Param responseId:
+     * @Param urlId: 
+     * @Return: boolean
+     */
+    boolean sendCallBackMessage(Long responseId,Long urlId) throws Exception;
 }
